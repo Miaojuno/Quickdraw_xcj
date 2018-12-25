@@ -88,6 +88,21 @@ draw/drawing.py调用cv2实现了鼠标绘图并读取所有点的功能,并在d
 
 --------------------------------------------------------------------------------------------------------
 
+我挑选的71种类型：
+
+'mushroom': 0, 'moon': 1, 'bread': 2, 'rain': 3, 'hand': 4, 'ice cream': 5, 'tree': 6, 'hamburger': 7,
+          'cloud': 8, 'basketball': 9, 'mountain': 10, 'finger': 11, 'tiger': 12, 'fork': 13, 'star': 14,
+          'baseball': 15, 'house': 16, 'cake': 17, 'castle': 18, 'line': 19, 'bear': 20, 'arm': 21, 'bus': 22,
+          'bridge': 23, 'wheel': 24, 'fish': 25, 'sun': 26, 'calculator': 27, 'pencil': 28, 'bed': 29, 'key': 30,
+          'river': 31, 'chair': 32, 'circle': 33, 'face': 34, 'airplane': 35, 'pig': 36, 'banana': 37, 'car': 38,
+          'bicycle': 39, 'cat': 40, 'bee': 41, 'clock': 42, 'door': 43, 'fence': 44, 'guitar': 45, 'dog': 46,
+          'tooth': 47, 'baseball bat': 48, 'camel': 49, 'train': 50, 'camera': 51, 'table': 52, 'eye': 53,
+          'shoe': 54, 'axe': 55, 'grass': 56, 'foot': 57, 'hospital': 58, 'apple': 59, 'cell phone': 60,
+          'beard': 61, 'cup': 62, 'elephant': 63, 'umbrella': 64, 'rabbit': 65, 'flower': 66, 't-shirt': 67,
+          'bird': 68, 'watermelon': 69, 'hammer': 70
+
+--------------------------------------------------------------------------------------------------------
+
 部分灵魂画作的识别：
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-2.PNG)
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-3.PNG)
