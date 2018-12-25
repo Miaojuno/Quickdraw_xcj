@@ -21,7 +21,7 @@ shuffle处理：
 而draw/preprecess_shuffle/shuffle_occ.py是某大手写的文件shuffle方法，可以shuffle我71分类的源文件，
 
 但是在shuffle所有分类文件时会发生错误，
-于是我通过多次分割合并shuffle实现总体的shuffle，所有源数据位于shuffled_date
+于是我通过多次分割合并shuffle实现总体的shuffle
 
 --------------------------------------------------------------------------------------------------------
 
