@@ -43,22 +43,29 @@ class model():
             model = Sequential()
 
             #conv+lstm
-            # model.add(Conv1D(filters=128, kernel_size=3, activation='relu',padding="same",input_shape=(None,3)))
-            # model.add(MaxPooling1D(pool_size=2,strides=2))
-            # model.add(Masking(mask_value=-1, input_shape=(self.maxlen//2, 3)))
-            # model.add(LSTM(units=self.lstm_units, input_shape=(self.maxlen//2, 3)))
-
-            #lstm
-            model.add(Masking(mask_value=-1, input_shape=(self.maxlen, 3)))
-            model.add(LSTM(units=self.lstm_units, input_shape=(self.maxlen, 3)))
-
+            model.add(Conv1D(filters=128, kernel_size=3, activation='relu',padding="same",input_shape=(None,3)))
+            model.add(MaxPooling1D(pool_size=2,strides=2))
+            model.add(Masking(mask_value=-1, input_shape=(self.maxlen//2, 3)))
+            model.add(LSTM(units=self.lstm_units, input_shape=(self.maxlen//2, 3)))
             # model.add(Dropout(0.2))
             model.add(Dense(self.classification_num, activation='softmax'))
             adam = Adam(lr=0.005, beta_1=0.9, beta_2=0.999, epsilon=1e-08, amsgrad=True)
             model.compile(loss="categorical_crossentropy", optimizer=adam, metrics=["accuracy"])
             # model.fit(x_train, y_train , validation_data=(x_test,y_test), epochs=2, batch_size=500, verbose=1,shuffle=True)
-            model.fit_generator(generator=self.get_train_batch(),steps_per_epoch=self.lines,epochs=self.n_epochs,verbose=1) #                               71-> 10015855
+            model.fit_generator(generator=self.get_train_batch(), steps_per_epoch=self.lines, epochs=self.n_epochs,
+                                verbose=1)  # 71-> 10015855
             model.save(self.model_path)
+
+            #lstm
+            # model.add(Masking(mask_value=-1, input_shape=(self.maxlen, 3)))
+            # model.add(LSTM(units=self.lstm_units, input_shape=(self.maxlen, 3)))
+            # # model.add(Dropout(0.2))
+            # model.add(Dense(self.classification_num, activation='softmax'))
+            # adam = Adam(lr=0.005, beta_1=0.9, beta_2=0.999, epsilon=1e-08, amsgrad=True)
+            # model.compile(loss="categorical_crossentropy", optimizer=adam, metrics=["accuracy"])
+            # # model.fit(x_train, y_train , validation_data=(x_test,y_test), epochs=2, batch_size=500, verbose=1,shuffle=True)
+            # model.fit_generator(generator=self.get_train_batch(),steps_per_epoch=self.lines,epochs=self.n_epochs,verbose=1) #                               71-> 10015855
+            # model.save(self.model_path)
 
 
         # acc=0
