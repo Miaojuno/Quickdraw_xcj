@@ -88,7 +88,7 @@ draw/drawing.py调用cv2实现了鼠标绘图并读取所有点的功能,并在d
 
 --------------------------------------------------------------------------------------------------------
 
-部分灵魂化作识别：
+部分灵魂画作的识别：
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-2.PNG)
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-3.PNG)
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-4.PNG)
