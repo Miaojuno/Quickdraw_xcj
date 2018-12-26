@@ -24,6 +24,7 @@ shuffle处理：
 
 但是在shuffle所有分类文件时会发生错误，
 于是我通过多次分割合并shuffle实现总体的shuffle
+csv_71_shuffled.csv已上传至：https://pan.baidu.com/s/19eWRtCTtAaiMH7JRT34VZA
 
 --------------------------------------------------------------------------------------------------------
 
