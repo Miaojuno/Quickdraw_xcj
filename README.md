@@ -43,10 +43,33 @@ draw/read.py用于读入源数据，并且存入迭代器中，draw/rnnmodel.py�
 模型：
 --
 模型搭建时，第一次尝试中使用了单层的lstm模型，2epoch后测试集精确率大约为0.768，模型保存于model/model1，
+```
+#lstm
+model.add(Masking(mask_value=-1, input_shape=(self.maxlen, 3)))
+model.add(LSTM(units=self.lstm_units, input_shape=(self.maxlen, 3)))
+model.add(Dropout(0.2))
+model.add(Dense(self.classification_num, activation='softmax'))
+adam = Adam(lr=0.005, beta_1=0.9, beta_2=0.999, epsilon=1e-08, amsgrad=True)
+model.compile(loss="categorical_crossentropy", optimizer=adam, metrics=["accuracy"])
 
-后改用一层卷积加上一层lstm，2epoch后测试集精确率大约为0.817，4epoch后测试集精确率大约为0.844,模型保存于model/model2，
+model.fit_generator(generator=self.get_train_batch(),steps_per_epoch=self.lines,epochs=self.n_epochs,verbose=1)                         
+model.save(self.model_path)
+```
+后改用一层卷积加上一层lstm，2epoch后测试集精确率大约为0.817，4epoch后测试集精确率大约为0.844,模型保存于model/model2
+```
+#conv+lstm
+model.add(Conv1D(filters=128, kernel_size=3, activation='relu',padding="same",input_shape=(None,3)))
+model.add(MaxPooling1D(pool_size=2,strides=2))
+model.add(Masking(mask_value=-1, input_shape=(self.maxlen//2, 3)))
+model.add(LSTM(units=self.lstm_units, input_shape=(self.maxlen//2, 3)))
+model.add(Dense(self.classification_num, activation='softmax'))
+adam = Adam(lr=0.005, beta_1=0.9, beta_2=0.999, epsilon=1e-08, amsgrad=True)
+model.compile(loss="categorical_crossentropy", optimizer=adam, metrics=["accuracy"])
+model.fit_generator(generator=self.get_train_batch(), steps_per_epoch=self.lines, epochs=self.n_epochs,
+            verbose=1)
+model.save(self.model_path)
+```
 
-![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-1.PNG)
 
 在我的cnn+lstm模型中，卷积层filters=128，窗口为3，进行padding，使用relu作为激活函数，
 
