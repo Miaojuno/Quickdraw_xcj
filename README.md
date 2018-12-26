@@ -25,8 +25,8 @@ shuffle处理：
 由于源数据过大无法全部加载进入内存，而神经网络需要对数据进行shuffle处理，因此我通过draw/preprecess_shuffle/csv_merage.py对所需要的文件进行合并，
 而draw/preprecess_shuffle/shuffle_occ.py是某大手写的文件shuffle方法，可以shuffle我71分类的源文件，
 
-但是在shuffle所有分类文件时会发生错误，
-于是我通过多次分割合并shuffle实现总体的shuffle
+但是`在shuffle过大文件时会发生错误`，
+可以通过多次分割+合并+shuffle实现总体的shuffle
 
 csv_71_shuffled.csv已上传至：https://pan.baidu.com/s/19eWRtCTtAaiMH7JRT34VZA
 
@@ -34,8 +34,8 @@ csv_71_shuffled.csv已上传至：https://pan.baidu.com/s/19eWRtCTtAaiMH7JRT34VZ
 
 源数据处理：
 --
-draw/read.py用于读入源数据，并且存入迭代器中，draw/rnnmodel.py中使用get_train_batch和get_test_batch读取并且修改格式，
-具体格式大致类似于[[23,24,1],[25,27,0],[30,37,0]...........]，其中每个三元组中前两项为点的x，y坐标，
+draw/read.py用于读入源数据，并且存入`迭代器`中，draw/rnnmodel.py中使用get_train_batch和get_test_batch读取并且修改格式，
+同样存入`迭代器`，具体格式大致类似于[[23,24,1],[25,27,0],[30,37,0]...........]，其中每个三元组中前两项为点的x，y坐标，
 第三项为1代表是笔画的开头，0则代表为笔画的过程点
 
 
@@ -105,9 +105,9 @@ maxlen      #输入图画最大点数
 
 lstm_units      #lstm神经元个数
 
-若是源数据没有手动分为训练及测试集，即训练集路径=测试集路径，会自动随机分割10%作为测试集，
-因为源数据中存在一些输入但是Google的模型难以识别，因此该部分也许会干扰训练，delfase=1时会过滤该部分源数据，
-continue_train=1时代表我已经存在该模型，并且需要在该模型基础上进行继续训练，
+若是源数据没有手动分为训练及测试集，即训练集路径=测试集路径，会自动随机分割10%作为测试集，\
+因为源数据中存在一些输入但是Google的模型难以识别，因此该部分也许会干扰训练，delfase=1时会过滤该部分源数据，\
+continue_train=1时代表我已经存在该模型，并且需要在该模型基础上进行继续训练，\
 maxlen输入画图最大点数代表rdp处理后的点数
 
 
