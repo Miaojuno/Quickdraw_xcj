@@ -9,14 +9,16 @@
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1.PNG)
 
 我使用了其中的train_simplified.zip 大小约为22GB，格式为countrycode,drawing,key_id,recognized,timestamp,word。
-我只使用了其中的drawing，recognized，word 分别轨迹坐标，判断成功怕标签，lable
-和源数据的区别是使用了Ramer-Douglas-Peucker algorithm对源数据的点进行了处理，若需要自己处理可以调用python中的rdp包，
+我只使用了其中的drawing，recognized，word 分别为轨迹坐标，判断成功的标签，lable
+
+train_simplified.zip和源数据的区别是使用了Ramer-Douglas-Peucker algorithm对源数据的点进行了处理，若需要自己处理可以调用python中的rdp包，
 在我的draw_test中我就是用它对自己的数据进行处理
 
 --------------------------------------------------------------------------------------------------------
 
 shuffle处理：
 由于机器条件和时间限制我只挑选了300多种类之中的71种进行训练
+
 由于源数据过大无法全部加载进入内存，而神经网络需要对数据进行shuffle处理，因此我通过draw/preprecess_shuffle/csv_merage.py对所需要的文件进行合并，
 而draw/preprecess_shuffle/shuffle_occ.py是某大手写的文件shuffle方法，可以shuffle我71分类的源文件，
 
