@@ -1,10 +1,13 @@
 # Quickdraw_xcj
 项目简介：
-  通过在鼠标在页面上进行绘图，利用神经网络识别所画内容
+--
+通过在鼠标在页面上进行绘图，利用神经网络识别所画内容
 
 
 
-源数据来源：https://www.kaggle.com/c/quickdraw-doodle-recognition/data
+源数据
+--
+来源：https://www.kaggle.com/c/quickdraw-doodle-recognition/data
 
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1.PNG)
 
@@ -16,7 +19,7 @@ train_simplified.zip和源数据的区别是使用了Ramer-Douglas-Peucker algor
 
 
 shuffle处理：
----------------
+--
 由于机器条件和时间限制我只挑选了300多种类之中的71种进行训练
 
 由于源数据过大无法全部加载进入内存，而神经网络需要对数据进行shuffle处理，因此我通过draw/preprecess_shuffle/csv_merage.py对所需要的文件进行合并，
@@ -27,18 +30,18 @@ shuffle处理：
 
 csv_71_shuffled.csv已上传至：https://pan.baidu.com/s/19eWRtCTtAaiMH7JRT34VZA
 
---------------------------------------------------------------------------------------------------------
 
 
 源数据处理：
+--
 draw/read.py用于读入源数据，并且存入迭代器中，draw/rnnmodel.py中使用get_train_batch和get_test_batch读取并且修改格式，
 具体格式大致类似于[[23,24,1],[25,27,0],[30,37,0]...........]，其中每个三元组中前两项为点的x，y坐标，
 第三项为1代表是笔画的开头，0则代表为笔画的过程点
 
---------------------------------------------------------------------------------------------------------
 
 
 模型：
+--
 模型搭建时，第一次尝试中使用了单层的lstm模型，2epoch后测试集精确率大约为0.768，模型保存于model/model1，
 
 后改用一层卷积加上一层lstm，2epoch后测试集精确率大约为0.817，4epoch后测试集精确率大约为0.844,模型保存于model/model2，
@@ -58,9 +61,9 @@ lstm神经元个数我使用了200，
 使用fit_generator作为训练函数，可以通过函数迭代的读入数据
 
 
---------------------------------------------------------------------------------------------------------
 
 模型调用参数说明：
+--
 raw_train_path          #   训练集路径
 
 raw_test_path          #   测试集路径
@@ -84,16 +87,16 @@ lstm_units      #lstm神经元个数
 continue_train=1时代表我已经存在该模型，并且需要在该模型基础上进行继续训练，
 maxlen输入画图最大点数代表rdp处理后的点数
 
---------------------------------------------------------------------------------------------------------
 
 ui：
+--
 draw/drawing.py调用cv2实现了鼠标绘图并读取所有点的功能,并在draw/drawing_test.py中调用，对点进行预处理，
 作为源数据输入神经网络模型，选取结果类别中十个可能性最大的，通过tkinter作为简单ui输出结果
 
---------------------------------------------------------------------------------------------------------
+
 
 我挑选的71种类型：
-
+--
 'mushroom': 0, 'moon': 1, 'bread': 2, 'rain': 3, 'hand': 4, 'ice cream': 5, 'tree': 6, 'hamburger': 7,
           'cloud': 8, 'basketball': 9, 'mountain': 10, 'finger': 11, 'tiger': 12, 'fork': 13, 'star': 14,
           'baseball': 15, 'house': 16, 'cake': 17, 'castle': 18, 'line': 19, 'bear': 20, 'arm': 21, 'bus': 22,
@@ -105,9 +108,10 @@ draw/drawing.py调用cv2实现了鼠标绘图并读取所有点的功能,并在d
           'beard': 61, 'cup': 62, 'elephant': 63, 'umbrella': 64, 'rabbit': 65, 'flower': 66, 't-shirt': 67,
           'bird': 68, 'watermelon': 69, 'hammer': 70
 
---------------------------------------------------------------------------------------------------------
+
 
 部分灵魂画作的识别：
+--
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-2.PNG)
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-3.PNG)
 ![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/1-4.PNG)
