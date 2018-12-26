@@ -1,4 +1,4 @@
-# Quickdraw_xcj
+# Miaojuno/Quickdraw_xcj
 项目简介：
 --
 通过在鼠标在页面上进行绘图，利用神经网络识别所画内容
@@ -34,9 +34,21 @@ csv_71_shuffled.csv已上传至：https://pan.baidu.com/s/19eWRtCTtAaiMH7JRT34VZ
 
 源数据处理：
 --
-draw/read.py用于读入源数据，并且存入`迭代器`中，draw/rnnmodel.py中使用get_train_batch和get_test_batch读取并且修改格式，
-同样存入`迭代器`，具体格式大致类似于[[23,24,1],[25,27,0],[30,37,0]...........]，其中每个三元组中前两项为点的x，y坐标，
-第三项为1代表是笔画的开头，0则代表为笔画的过程点
+draw/read.py用于读入源数据,将其处理为如下格式存入`迭代器`中\
+x形如：
+```
+[[[167, 109, 80, 69, 58, 31, 57, 117, 99, 52, 30, 6, 1, 2, 66, 98, 253, 254, 246, 182, 165], [140, 194, 227, 232, 229, 229, 206, 124, 123, 149, 157, 159, 153, 110, 82, 77, 74, 109, 121, 127, 120]], [[207, 207, 210, 221, 238], [74, 103, 114, 128, 135]], [[119, 107, 76, 70, 49, 39, 60, 93], [72, 41, 3, 0, 1, 5, 38, 70]]
+```
+y形如：
+```
+'airplane'
+```
+draw/rnnmodel.py中使用get_train_batch和get_test_batch读取并且修改x的格式，形如：
+```
+[[167,140,1],[109,194,0],[80,227,0],[69,229,0]....[165,120,0],[207,74,1],[207,103,0]....]
+```
+shape为(?,3)的二维列表，其中每个三元组中前两项为点的x，y坐标，第三项为1代表是笔画的开头，0则代表为笔画的过程点
+同样将其存入`迭代器`
 
 
 
@@ -47,7 +59,6 @@ draw/read.py用于读入源数据，并且存入`迭代器`中，draw/rnnmodel.p
 #lstm
 model.add(Masking(mask_value=-1, input_shape=(self.maxlen, 3)))
 model.add(LSTM(units=self.lstm_units, input_shape=(self.maxlen, 3)))
-model.add(Dropout(0.2))
 model.add(Dense(self.classification_num, activation='softmax'))
 adam = Adam(lr=0.005, beta_1=0.9, beta_2=0.999, epsilon=1e-08, amsgrad=True)
 model.compile(loss="categorical_crossentropy", optimizer=adam, metrics=["accuracy"])
@@ -75,13 +86,15 @@ model.save(self.model_path)
 
 使用maxpooling，步长为2，窗口为2，因此在进入lstm层时长度减半，
 
-lstm神经元个数我使用了200，
+masking层用于处理边长序列，使其都为指定长度输入lstm层，我在这里使用了150作为maxlen，
 
-全连接层的激活函数使用softmax，
+因此lstm层inputshape变为了(?，3)，lstm神经元个数我使用了200，
 
-使用adamw作为神经网络优化算法，并且略微调大了学习率
+全连接层的激活函数使用softmax作为我的分类模型的激活函数，此时shape变为了71项的向量
 
-使用fit_generator作为训练函数，可以通过函数迭代的读入数据
+我使用adamw作为神经网络优化算法，并且略微调大了学习率
+
+使用fit_generator作为训练函数，可以通过generator调用get_train_batch函数迭代的读入数据，规避内存不够的问题
 
 
 
@@ -106,31 +119,36 @@ maxlen      #输入图画最大点数
 lstm_units      #lstm神经元个数
 
 若是源数据没有手动分为训练及测试集，即训练集路径=测试集路径，会自动随机分割10%作为测试集，\
-因为源数据中存在一些输入但是Google的模型难以识别，因此该部分也许会干扰训练，delfase=1时会过滤该部分源数据，\
-continue_train=1时代表我已经存在该模型，并且需要在该模型基础上进行继续训练，\
-maxlen输入画图最大点数代表rdp处理后的点数
+因为源数据中存在一些图是Google的模型难以识别的\
+![Image text](https://github.com/Miaojuno/Quickdraw_xcj/blob/master/img/2-1.PNG)\
+即源数据中recognized为false的条目，该部分源数据作为干扰项也许会降低训练效果，delfase=1时会过滤该部分源数据，\
+continue_train=1时代表我已经存在该神经网络模型，并且需要在该模型基础上进行继续训练，\
+maxlen代表每个图rdp处理后的轨迹点数
 
 
 ui：
 --
-draw/drawing.py调用cv2实现了鼠标绘图并读取所有点的功能,并在draw/drawing_test.py中调用，对点进行预处理，
-作为源数据输入神经网络模型，选取结果类别中十个可能性最大的，通过tkinter作为简单ui输出结果
+draw/drawing.py调用cv2实现了鼠标绘图并记录轨迹点的功能,并在draw/drawing_test.py中被调用，\
+再draw/drawing_test.py中通过rdp对轨迹点进行预处理，再转换为三元组形式，\
+作为源数据输入神经网络模型，输出所有类别的可能性列表，选取列表中十个最大的，也就是神经网络识别认为最有可能性的十项,\
+然后通过tkinter库制作简单ui展示输出结果，绘图完成后按C让神经网络识别图形，识别后通过点击按钮继续绘图
 
 
 
 我挑选的71种类型：
 --
+```
 'mushroom': 0, 'moon': 1, 'bread': 2, 'rain': 3, 'hand': 4, 'ice cream': 5, 'tree': 6, 'hamburger': 7,
-          'cloud': 8, 'basketball': 9, 'mountain': 10, 'finger': 11, 'tiger': 12, 'fork': 13, 'star': 14,
-          'baseball': 15, 'house': 16, 'cake': 17, 'castle': 18, 'line': 19, 'bear': 20, 'arm': 21, 'bus': 22,
-          'bridge': 23, 'wheel': 24, 'fish': 25, 'sun': 26, 'calculator': 27, 'pencil': 28, 'bed': 29, 'key': 30,
-          'river': 31, 'chair': 32, 'circle': 33, 'face': 34, 'airplane': 35, 'pig': 36, 'banana': 37, 'car': 38,
-          'bicycle': 39, 'cat': 40, 'bee': 41, 'clock': 42, 'door': 43, 'fence': 44, 'guitar': 45, 'dog': 46,
-          'tooth': 47, 'baseball bat': 48, 'camel': 49, 'train': 50, 'camera': 51, 'table': 52, 'eye': 53,
-          'shoe': 54, 'axe': 55, 'grass': 56, 'foot': 57, 'hospital': 58, 'apple': 59, 'cell phone': 60,
-          'beard': 61, 'cup': 62, 'elephant': 63, 'umbrella': 64, 'rabbit': 65, 'flower': 66, 't-shirt': 67,
-          'bird': 68, 'watermelon': 69, 'hammer': 70
-
+'cloud': 8, 'basketball': 9, 'mountain': 10, 'finger': 11, 'tiger': 12, 'fork': 13, 'star': 14,
+'baseball': 15, 'house': 16, 'cake': 17, 'castle': 18, 'line': 19, 'bear': 20, 'arm': 21, 'bus': 22,
+'bridge': 23, 'wheel': 24, 'fish': 25, 'sun': 26, 'calculator': 27, 'pencil': 28, 'bed': 29, 'key': 30,
+'river': 31, 'chair': 32, 'circle': 33, 'face': 34, 'airplane': 35, 'pig': 36, 'banana': 37, 'car': 38,
+'bicycle': 39, 'cat': 40, 'bee': 41, 'clock': 42, 'door': 43, 'fence': 44, 'guitar': 45, 'dog': 46,
+'tooth': 47, 'baseball bat': 48, 'camel': 49, 'train': 50, 'camera': 51, 'table': 52, 'eye': 53,
+'shoe': 54, 'axe': 55, 'grass': 56, 'foot': 57, 'hospital': 58, 'apple': 59, 'cell phone': 60,
+'beard': 61, 'cup': 62, 'elephant': 63, 'umbrella': 64, 'rabbit': 65, 'flower': 66, 't-shirt': 67,
+'bird': 68, 'watermelon': 69, 'hammer': 70
+```
 
 
 部分灵魂画作的识别：
