@@ -138,6 +138,14 @@ draw/drawing.py调用cv2实现了鼠标绘图并记录轨迹点的功能,并在d
 然后通过tkinter库制作简单ui展示输出结果，绘图完成后按C让神经网络识别图形，识别后通过点击按钮继续绘图
 
 
+复现步骤：
+---
+1解压kaggle下载的simple数据，\
+2Csv_merge.py中的第一个路径改为你所挑选的所有分类的源数据文件所在文件夹，第二个路径修改位存储路径（rawdate.csv）\
+3在命令提示符中使用python shuffle_ooc.py rawdate.csv > rawdate_shuffled.csv 命令进行shuffle，注意py文件和两个csv文件需要完整路径，或是存储在同一个目录下，在该目录下运行命令提示符，会输出文件行数（文件过大时需要分割shuffle再合并）\
+4调用rnnmodel.py进行模型训练，注意所有参数都需要填写，会输出测试集的训练准确率，也可以调用acc.py进行精确率测试\
+5调用draw_test.py可以进行简单绘图并识别\
+
 
 我挑选的71种类型：
 --
