@@ -20,7 +20,7 @@ train_simplified.zip和源数据的区别是使用了Ramer-Douglas-Peucker algor
 
 shuffle处理：
 --
-由于机器条件和时间限制我只挑选了300多种类之中的71种进行训练
+由于机器条件和时间限制我只挑选了71个种类进行训练，340种类训练只迭代两次
 
 由于源数据过大无法全部加载进入内存，而神经网络需要对数据进行shuffle处理，因此我通过draw/preprecess_shuffle/csv_merage.py对所需要的文件进行合并，
 而draw/preprecess_shuffle/shuffle_occ.py是某大手写的文件shuffle方法，可以shuffle我71分类的源文件，
@@ -85,6 +85,7 @@ model.fit_generator(generator=self.get_train_batch(), steps_per_epoch=self.lines
 model.save(self.model_path)
 ```
 
+340分类的2epoch精确率大约为63%，模型保存于model/model3
 
 在我的cnn+lstm模型中，卷积层filters=128，窗口为3，进行padding，使用relu作为激活函数，
 
