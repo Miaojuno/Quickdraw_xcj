@@ -26,7 +26,9 @@ shuffle处理：
 而draw/preprecess_shuffle/shuffle_occ.py是某大手写的文件shuffle方法，可以shuffle我71分类的源文件，
 
 但是`在shuffle过大文件时会发生错误`，
-可以通过多次分割+合并+shuffle实现总体的shuffle
+可以通过\
+部分合并+shuffle+分割+部分合并+shuffle+合并\
+实现总体的shuffle
 
 处理过的71分类源数据csv_71_shuffled.csv已上传至：https://pan.baidu.com/s/19eWRtCTtAaiMH7JRT34VZA
 
